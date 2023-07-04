@@ -1,7 +1,7 @@
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {AiFillPushpin , AiOutlineDelete} from "react-icons/ai"
-import {MdModeEditOutline} from "react-icons/md"
+import {MdModeEditOutline , MdDateRange} from "react-icons/md"
 import { db } from "../firebase.config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,28 @@ const NoteCard = ({item, setLoad}) => {
   const [title, setTitle] = useState(item.data.title);
   const [tagline, setTagline] = useState(item.data.tag);
   const [noteInfo, setNoteInfo] = useState(item.data.Info);
+
+  // function for getting date 
+  const timeId = new Date(item.data.id);
+  const date = timeId.getDate();
+  const month = timeId.getMonth();
+  const year = timeId.getFullYear();
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
 
 
   const toggleModal =()=>{
@@ -64,7 +86,7 @@ const NoteCard = ({item, setLoad}) => {
   return (
     <div className="flex bg-[#eec789] flex-col justify-between  m-6 w-[350px] min-h-[250px] max-h-[450px] rounded-lg ">
       <ToastContainer />
-      <div className="p-4 flex justify-between">
+      <div className="px-3 flex justify-between">
       <div className="hover:text-blue-800  cursor-pointer duration-300">
         <p className="text-3xl font-sans">{item.data.title}</p>
         <p className="">{item.data.tag}</p>
@@ -85,13 +107,18 @@ const NoteCard = ({item, setLoad}) => {
         </p>
       </div>
       {/* <button className="rounded-b-lg flex items-center justify-center bg-lime-400 py-4 overflow-hidden"></button> */}
-      <div className="flex items-center justify-around px-4 py-2 rounded-b-lg">
+      <div className="flex items-center justify-between px-4 py-2 rounded-b-lg bg-yellow-500 ">
+        <div className="flex items-center justify-center">
+        <MdDateRange size={18}/><span className="font-mono">{date} {monthNames[month]},{year}</span>
+        </div>
+        <div className="flex items-center">
         <AiOutlineDelete 
         onClick={handleDelete}
-        size={25} className="hover:scale-110 cursor-pointer duration-300 hover:text-red-500"/>
+        size={25} className="hover:scale-110 cursor-pointer mr-4 duration-300 hover:text-red-500"/>
         <MdModeEditOutline 
         onClick={toggleModal}
         size={25} className=" hover:scale-110 cursor-pointer duration-300"/>
+        </div>
       </div>
       {editModal && (
         <div className="fixed inset-0 flex justify-center items-center z-10 bg-black bg-opacity-40">
